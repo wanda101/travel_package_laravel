@@ -1,0 +1,109 @@
+https://mailtrap.io/
+https://startbootstrap.com/
+
+membuat controller home
+php artisan make:controller HomeController
+
+membuat router admin
+Route::prefix('admin')
+    ->namespace('admin')
+    ->group(function () {
+        route::get('/', 'DashboardController@index')->name('dashboard');
+    });
+
+membuat router user
+Route::get('/', 'HomeController@index')->name('home');
+
+setelah merapihkan templete, kemudian membuat migration
+php artisan make:migration create_travel_packages_table --create=travel_pakages
+php artisan make:migration create_galleries_table --create=gelleries
+php artisan make:migration create_transactions_table --create=transactions
+php artisan make:migration create_transaction_details_table --create=transaction_details
+php artisan make:migration add_roles_field_to_users_table --table=users
+
+setelah membuat migrate, kemudian membuat midlerware
+php artisan make:middleware IsAdmin
+dafarkan middleware IsAdmin ke kernel
+
+kemudian instal auth 
+composer require laravel/ui
+php artisan ui vue --auth
+pilih NO
+hapus di view welcome dan home bawaan
+hapus route home yang ada di web 
+
+tambahkan kolom username di table user
+php artisan make:migration add_username_field_to_users_table --table=users
+
+buat model travel
+php artisan make:model TravelPackage
+php artisan make:request Admin\TravelPackageRequest
+
+membuat crud paket
+php artisan make:controller Admin\TravelPackageController --resource
+
+konek storage gambar
+php artisan storage:link
+
+jika error seperti ini, itu artinya nama di model dan di phpmyadminya beda
+Illuminate\Database\QueryException
+SQLSTATE[42S02]: Base table or view not found: 1146 Table 'travel_dewa.galleries' doesn't exist (SQL: select * from `galleries` where `galleries`.`deleted_at` is null)
+
+jika error seperti ini, itu artinya huruf S di storage harus huruf besar
+Class 'storage' not found (View: C:\xampp\htdocs\travel_dewa_laravel\resources\views\pages\admin\gallery\index.blade.php)
+
+jika error seperti ini, itu artinya exists:users,username pake titik bukan koma
+Route [checkout_process] not defined. (View: C:\xampp\htdocs\travel_dewa_laravel\resources\views\pages\detail.blade.php)
+'username' => 'required|string|exists:users,username',
+
+untuk menjalankan mjml
+npm install -g mjml
+untuk mengubah html 
+mjml checkoutemail.mjml -o checkoutemail.html
+mjml checkoutemail.mjml
+
+cara membuat email 
+php artisan make:mail TransactionSuccess
+
+untuk upload ke hosting
+buka file .env
+APP_ENV=local ganti jadi APP_ENV=production
+APP_DEBUG=true ganti jadi APP_DEBUG=false
+
+panduan domain
+domainesia.com
+
+Menghubungkan MIDTRANS
+masukan credensial di file .env
+MIDTRANS_SERVER_KEY="SB-Mid-server-iijU0ybbb22XXXVvIX4ZFig_"
+MIDTRANS_IS_PRODUCTION=false
+MIDTRANS_IS_SANITIZED=true
+MIDTRANS_IS_3DS=true
+
+buat file midtrans.php didalam folder config
+clear folder config php artisan config:clear
+instal midtrans https://github.com/Midtrans/midtrans-php
+composer require midtrans/midtrans-php
+buka dokumentasi https://snap-docs.midtrans.com/
+
+tambahkan .htaccess di public
+mempilkan gambar di hosting 
+masuk ke public 
+buat file symlink.php
+<?php
+$targetfolder = __DIR__ . '/../laravel/storage/app/public';
+$linkfolder = __DIR__ . '/storage';
+symlink($targetfolder, $linkfolder);
+echo 'symlink sukses';
+hapus folder storage yang ada di dalam folder public
+
+menganti mailtrap dengan google
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.googlemail.com
+MAIL_PORT=465
+MAIL_USERNAME=youremail@gmail.com
+MAIL_PASSWORD=your password
+MAIL_ENCRYPTION=ssl
+kemudian rubah email, masuk account->setting->
+
+
